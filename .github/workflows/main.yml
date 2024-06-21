@@ -1,44 +1,43 @@
-name: Angular-CI
+# This is a basic workflow to help you get started with Actions
 
+name: Angular Automatiza 
+
+# Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
+    
 permissions: write-all
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: CheckOut
+      - name: checkout
         uses: actions/checkout@v4
-
-      # Configuracion Node.js
+        
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.2
         with:
-          node-version: "20.11.0"
+          node-version: v20.13.1
+          
+      - name: instalar dependencias
+        run: npm install
 
-      # Instalación de dependencias
-      - name: Instala dependencias
-        run:  npm i
+      - name: Concutruir aplicacion
+        run: npm run build:prod
 
-      # Despliegue de la aplicación
-      - name: Build
-        run:  npm run build:prod
-
-        # Deploy GitHub Pages
       - name: GitHub Pages
         uses: crazy-max/ghaction-github-pages@v4.0.0
         with:
-          build_dir: dist/[gbr-shop]/browser
+          build_dir: dist/gbr-shop/browser
           target_branch: gh-pages
         env:
           GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
